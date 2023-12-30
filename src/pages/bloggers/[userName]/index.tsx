@@ -1,13 +1,14 @@
 import { child, get, ref } from "firebase/database";
 import Link from "next/link";
 import { rtdb } from "../../../../firebaseConfig";
+import { Bloggers } from "@/types/Bloggers";
 
 export const getServerSideProps = async ({ params }) => {
 	// Fetch data from Firebase RTDB:
 	const dbRef = ref(rtdb);
 
 	// fetch blogger data by userName:
-	const bloggerData = await get(
+	const bloggerData: Bloggers.ListOrderedByUserName.Item = await get(
 		child(dbRef, `users/listOrderedByUserName/${params.userName}`)
 	)
 		.then((snapshot) => {
@@ -18,7 +19,7 @@ export const getServerSideProps = async ({ params }) => {
 		.catch((error) => console.log(error));
 
 	// fetch blogger by userId:
-	const bloggerPublicData = await get(
+	const bloggerPublicData: Bloggers.Blogger.PublicData = await get(
 		child(dbRef, `users/${bloggerData.userId}/publicData`)
 	)
 		.then((snapshot) => {
@@ -35,7 +36,7 @@ export const getServerSideProps = async ({ params }) => {
 export default function Page({
 	bloggerPublicData,
 }: {
-	bloggerPublicData: any;
+	bloggerPublicData: Bloggers.Blogger.PublicData;
 }) {
 	return (
 		<div className="blogger-page">

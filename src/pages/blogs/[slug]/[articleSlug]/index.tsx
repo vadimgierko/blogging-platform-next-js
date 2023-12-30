@@ -1,9 +1,9 @@
 import { child, get, ref } from "firebase/database";
-import { useRouter } from "next/router";
 import { rtdb } from "../../../../../firebaseConfig";
 import Link from "next/link";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
+import { Articles } from "@/types/Articles";
 
 export const getServerSideProps = async ({ params }) => {
 	// Fetch data from Firebase RTDB:
@@ -11,7 +11,7 @@ export const getServerSideProps = async ({ params }) => {
 
 	// fetch article data by slug (link):
 
-	const articleData = await get(
+	const articleData: Articles.ListOrderedByLinks.Item = await get(
 		child(dbRef, `articles/listOrderedByLinks/${params.articleSlug}`)
 	)
 		.then((snapshot) => {
@@ -22,7 +22,9 @@ export const getServerSideProps = async ({ params }) => {
 		.catch((error) => console.log(error));
 
 	// fetch article by key:
-	const article = await get(child(dbRef, `articles/${articleData.key}`))
+	const article: Articles.Article = await get(
+		child(dbRef, `articles/${articleData.key}`)
+	)
 		.then((snapshot) => {
 			if (snapshot.exists()) {
 				return snapshot.val();
@@ -30,12 +32,10 @@ export const getServerSideProps = async ({ params }) => {
 		})
 		.catch((error) => console.log(error));
 
-	// Pass data to the page via props
 	return { props: { article } };
-}; //satisfies GetServerSideProps<{ repo: Repo }>
+};
 
-export default function Page({ article }: { article: any }) {
-	const router = useRouter();
+export default function Page({ article }: { article: Articles.Article }) {
 	return (
 		<>
 			<header className="text-center">

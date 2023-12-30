@@ -2,16 +2,7 @@ import { child, get, ref } from "firebase/database";
 import { useRouter } from "next/router";
 import { rtdb } from "../../../../firebaseConfig";
 import Link from "next/link";
-
-type Blog = {
-	author: string;
-	blogId: string;
-	description: string;
-	link: string;
-	title: string;
-	userId: string;
-	userName: string;
-};
+import { Blogs } from "@/types/Blogs";
 
 export const getServerSideProps = async ({ params }) => {
 	// Fetch data from Firebase RTDB:
@@ -19,7 +10,7 @@ export const getServerSideProps = async ({ params }) => {
 
 	// fetch blog data by slug (link):
 
-	const blogData = await get(
+	const blogData: Blogs.ListOrderedByLinks.Item = await get(
 		child(dbRef, `blogs/listOrderedByLinks/${params.slug}`)
 	)
 		.then((snapshot) => {
@@ -30,7 +21,7 @@ export const getServerSideProps = async ({ params }) => {
 		.catch((error) => console.log(error));
 
 	// fetch blog by blogId:
-	const blog = await get(child(dbRef, `blogs/${blogData.key}`))
+	const blog: Blogs.Blog = await get(child(dbRef, `blogs/${blogData.key}`))
 		.then((snapshot) => {
 			if (snapshot.exists()) {
 				return snapshot.val();
@@ -40,9 +31,9 @@ export const getServerSideProps = async ({ params }) => {
 
 	// Pass data to the page via props
 	return { props: { blog } };
-}; //satisfies GetServerSideProps<{ repo: Repo }>
+};
 
-export default function Page({ blog }: { blog: any }) {
+export default function Page({ blog }: { blog: Blogs.Blog }) {
 	const router = useRouter();
 	return (
 		<>
