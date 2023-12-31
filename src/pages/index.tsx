@@ -10,8 +10,6 @@ export default function Home() {
 					content="My Blogging Platform App (created in 2021, upgraded in July 2022) rewritten from scratch in Next.js & TypeScript (December 2023)"
 				/>
 				<meta name="author" content="Vadim Gierko" />
-				<meta name="viewport" content="width=device-width, initial-scale=1" />
-				<link rel="icon" href="/favicon.ico" />
 			</Head>
 
 			<article className="about-page">

@@ -2,8 +2,9 @@ import { child, get, ref } from "firebase/database";
 import Link from "next/link";
 import { rtdb } from "../../../../firebaseConfig";
 import { Bloggers } from "@/types/Bloggers";
+import Head from "next/head";
 
-export const getServerSideProps = async ({ params }) => {
+export const getServerSideProps = async ({ params }: { params: any }) => {
 	// Fetch data from Firebase RTDB:
 	const dbRef = ref(rtdb);
 
@@ -39,28 +40,63 @@ export default function Page({
 	bloggerPublicData: Bloggers.Blogger.PublicData;
 }) {
 	return (
-		<div className="blogger-page">
-			<h1>
-				{bloggerPublicData.data.firstName +
-					" " +
-					bloggerPublicData.data.lastName}
-			</h1>
-			<hr />
-			<p>user name: {"@" + bloggerPublicData.data.userName}</p>
-			<nav className="blogger-blogs">
-				{bloggerPublicData.blogs ? (
-					Object.keys(bloggerPublicData.blogs).map((blogId) => (
-						<Link
-							key={blogId}
-							href={"/blogs/" + bloggerPublicData.blogs[blogId].link}
-						>
-							<h3>{bloggerPublicData.blogs[blogId].title}</h3>
-						</Link>
-					))
-				) : (
-					<p>Downloading blogger blogs or there are no blogs...</p>
-				)}
-			</nav>
-		</div>
+		<>
+			<Head>
+				<title>
+					Blogging Platform |{" "}
+					{bloggerPublicData.data.firstName +
+						" " +
+						bloggerPublicData.data.lastName}
+				</title>
+				<meta
+					name="og:title"
+					content={`Blogging Platform | ${
+						bloggerPublicData.data.firstName +
+						" " +
+						bloggerPublicData.data.lastName
+					}`}
+				/>
+
+				<meta
+					name="description"
+					content={`See ${
+						bloggerPublicData.data.firstName +
+						" " +
+						bloggerPublicData.data.lastName
+					}'s blogs published on Blogging Platform!`}
+				/>
+				<meta
+					name="og:description"
+					content={`See ${
+						bloggerPublicData.data.firstName +
+						" " +
+						bloggerPublicData.data.lastName
+					}'s blogs published on Blogging Platform!`}
+				/>
+			</Head>
+			<div className="blogger-page">
+				<h1>
+					{bloggerPublicData.data.firstName +
+						" " +
+						bloggerPublicData.data.lastName}
+				</h1>
+				<hr />
+				<p>username: {"@" + bloggerPublicData.data.userName}</p>
+				<nav className="blogger-blogs">
+					{bloggerPublicData.blogs ? (
+						Object.keys(bloggerPublicData.blogs).map((blogId) => (
+							<Link
+								key={blogId}
+								href={"/blogs/" + bloggerPublicData.blogs[blogId].link}
+							>
+								<h3>{bloggerPublicData.blogs[blogId].title}</h3>
+							</Link>
+						))
+					) : (
+						<p>Downloading blogger blogs or there are no blogs...</p>
+					)}
+				</nav>
+			</div>
+		</>
 	);
 }
