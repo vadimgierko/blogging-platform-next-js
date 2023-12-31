@@ -2,6 +2,7 @@ import { child, ref, get } from "firebase/database";
 import Link from "next/link";
 import { rtdb } from "../../../firebaseConfig";
 import { Bloggers } from "@/types/Bloggers";
+import Head from "next/head";
 
 export const getServerSideProps = async () => {
 	// Fetch data from Firebase RTDB:
@@ -27,6 +28,20 @@ export default function Page({
 }) {
 	return (
 		<>
+			<Head>
+				<title>Blogging Platform | Bloggers</title>
+				<meta name="title" content="Blogging Platform | Bloggers" />
+
+				<meta
+					name="description"
+					content="See the list of all of bloggers registered in Blogging Platform & their list of blogs!"
+				/>
+				<meta
+					name="og:description"
+					content="See the list of all of bloggers registered in Blogging Platform & their list of blogs!"
+				/>
+			</Head>
+
 			<h1>Bloggers</h1>
 
 			<nav>
