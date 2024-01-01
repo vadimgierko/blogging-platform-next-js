@@ -1,11 +1,10 @@
 import { child, get, ref } from "firebase/database";
 import { rtdb } from "../../../../../firebaseConfig";
 import Link from "next/link";
-import ReactMarkdown from "react-markdown";
-import remarkGfm from "remark-gfm";
 import { Articles } from "@/types/Articles";
 import { Blogs } from "@/types/Blogs";
 import Head from "next/head";
+import MarkdownRenderer from "@/components/MarkdownRenderer";
 
 /* ========================= FOR SSR ============================//
 export const getServerSideProps = async ({ params }: { params: any }) => {
@@ -172,9 +171,7 @@ export default function Page({ article }: { article: Articles.Article }) {
 
 				<hr />
 
-				<ReactMarkdown remarkPlugins={[remarkGfm]}>
-					{article.metadata.content}
-				</ReactMarkdown>
+				<MarkdownRenderer markdown={article.metadata.content} />
 			</article>
 		</>
 	);
