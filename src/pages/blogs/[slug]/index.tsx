@@ -108,6 +108,10 @@ export async function getStaticPaths() {
 
 export default function Page({ blog }: { blog: Blogs.Blog }) {
 	const router = useRouter();
+
+	if (!blog)
+		return <p className="text-align text-danger">There is no such blog...</p>;
+
 	return (
 		<>
 			<Head>
